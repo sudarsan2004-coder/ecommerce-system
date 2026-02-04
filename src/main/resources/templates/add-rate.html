@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Set Today Rate | Coconut Business</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+        .rate-card {
+            max-width: 420px;
+            margin: auto;
+            margin-top: 80px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card rate-card p-4">
+    <h4 class="text-success text-center fw-bold mb-3">Set Today Rate</h4>
+    <p class="text-center text-muted mb-4">
+        Rate will be applied for <b>Today</b> automatically
+    </p>
+
+    <form th:action="@{/rate/set}" th:object="${rate}" method="post">
+
+        <div class="mb-3">
+            <label>Piece Rate (₹)</label>
+            <input type="number" class="form-control"
+                   th:field="*{pieceRate}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Kilo Rate (₹)</label>
+            <input type="number" class="form-control"
+                   th:field="*{kiloRate}" required>
+        </div>
+
+        <button class="btn btn-success w-100">Save Today’s Rate</button>
+    </form>
+</div>
+
+</body>
+</html>

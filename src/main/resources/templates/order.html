@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Place Order | Coconut Business</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(to right, #f1f8e9, #f9fbe7);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        }
+
+        .order-card {
+            max-width: 520px;
+            margin: auto;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            background: #ffffff;
+        }
+
+        .header-box {
+            background: #2e7d32;
+            color: white;
+            padding: 20px;
+            border-radius: 18px 18px 0 0;
+            text-align: center;
+        }
+
+        .price-badge {
+            background: #e8f5e9;
+            color: #1b5e20;
+            font-weight: 600;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .btn-order {
+            background: #2e7d32;
+            border-radius: 30px;
+            padding: 10px;
+            font-weight: 500;
+        }
+
+        .btn-order:hover {
+            background: #1b5e20;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<script>
+    const deliveryInput = document.getElementById("deliveryDate");
+    const errorDiv = document.getElementById("dateError");
+
+    // Calculate min date = today + 3 days
+    const today = new Date();
+    today.setDate(today.getDate() + 3);
+
+    const minDate = today.toISOString().split("T")[0];
+    deliveryInput.min = minDate;
+
+    deliveryInput.addEventListener("change", function () {
+        if (deliveryInput.value < minDate) {
+            errorDiv.textContent = "❌ Please select a delivery date after 3 days.";
+            deliveryInput.value = "";
+        } else {
+            errorDiv.textContent = "";
+        }
+    });
+</script>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="order-card">
+
+        <!-- HEADER -->
+        <div class="header-box">
+            <h4 class="mb-1">Place Coconut Order 🥥</h4>
+            <small>Fresh & reliable supply</small>
+        </div>
+
+        <!-- BODY -->
+        <div class="p-4">
+
+            <div class="mb-3 text-center">
+                <h6>
+                    <strong>Marriage Hall</strong><br>
+                    <span th:text="${hall.hallName}"></span>
+                </h6>
+            </div>
+
+            <div class="price-badge mb-4">
+                Today Piece Rate: ₹<span th:text="${rate}"></span> / coconut
+            </div>
+
+            <form th:action="@{/order/save}" method="post">
+
+                <!-- Hidden Fields -->
+                <input type="hidden" name="hallId" th:value="${hall.id}">
+                <input type="hidden" name="orderType" value="PIECE">
+
+                <div class="mb-3">
+                    <label class="form-label">Quantity (Pieces)</label>
+                    <input type="number"
+                           name="quantity"
+                           class="form-control"
+                           min="1"
+                           placeholder="Enter number of coconuts"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Delivery Date</label>
+                    <input type="date"
+                           name="deliveryDate"
+                           class="form-control"
+                           required>
+                    <small class="info-text">
+                        Delivery available minimum after 3 days
+                    </small>
+                    
+                    <div class="text-danger mt-1" id="dateError"></div>
+                    
+                </div>
+
+                <button type="submit" class="btn btn-order w-100 mt-3">
+                    Confirm Order
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
